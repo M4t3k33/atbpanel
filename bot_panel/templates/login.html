@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Logowanie - ATeamBot Panel</title>
-    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
-</head>
+    <head>
+        <title>Panel ATeamBot - Logowanie</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="../static/login.css">
+    </head>
+    
 <body class="bg-gray-100">
     <div class="min-h-screen flex items-center justify-center">
         <div class="bg-white p-8 rounded-lg shadow-md w-96">
@@ -35,4 +38,38 @@
         </div>
     </div>
 </body>
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        
+        try {
+            const response = await fetch('http://380656ce.pylexnodes.net:5000/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: formData.get('username'),
+                    password: formData.get('password')
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                // Bezpośrednie przekierowanie do dashboard.html
+                window.location.href = '/dashboard.html';
+                // Zapisz token w localStorage jeśli jest zwracany
+                if (data.token) {
+                    localStorage.setItem('auth_token', data.token);
+                }
+            } else {
+                alert('Błędne dane logowania!');
+            }
+        } catch (error) {
+            console.error('Błąd:', error);
+            alert('Błąd połączenia z serwerem!');
+        }
+    });
+</script>
 </html>
