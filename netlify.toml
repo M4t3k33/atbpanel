@@ -6,7 +6,6 @@
 [[redirects]]
   from = "/*"
   to = "/login.html"
-  [[redirects]]
   from = "/login.html"
   to = "/dashboard.html"
   status = 200
