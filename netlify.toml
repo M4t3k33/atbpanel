@@ -1,11 +1,12 @@
 [build]
-  command = "pip install -r requirements.txt"
   publish = "templates"
-  functions = "functions"
 
 [[redirects]]
   from = "/*"
   to = "/login.html"
-  from = "login.html"
-  to = "dashboard.html"
+  status = 200
+
+[[redirects]]
+  from = "/dashboard"
+  to = "/dashboard.html"
   status = 200
