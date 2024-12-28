@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Panel ATeamBot</title>
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <!-- Sidebar -->
+    <div class="fixed inset-y-0 left-0 w-64 bg-purple-800 text-white">
+        <div class="p-4">
+            <h1 class="text-2xl font-bold mb-8">ATeamBot Panel</h1>
+            <nav class="space-y-4">
+                <a href="#dashboard" class="block py-2 px-4 hover:bg-purple-700 rounded">
+                    <i class="fas fa-chart-line mr-2"></i> Dashboard
+                </a>
+                <a href="#users" class="block py-2 px-4 hover:bg-purple-700 rounded">
+                    <i class="fas fa-users mr-2"></i> Użytkownicy
+                </a>
+                <a href="#tickets" class="block py-2 px-4 hover:bg-purple-700 rounded">
+                    <i class="fas fa-ticket mr-2"></i> Tickety
+                </a>
+                <a href="#premium" class="block py-2 px-4 hover:bg-purple-700 rounded">
+                    <i class="fas fa-crown mr-2"></i> Premium
+                </a>
+                <a href="#announcements" class="block py-2 px-4 hover:bg-purple-700 rounded">
+                    <i class="fas fa-bullhorn mr-2"></i> Ogłoszenia
+                </a>
+                <a href="#settings" class="block py-2 px-4 hover:bg-purple-700 rounded">
+                    <i class="fas fa-cog mr-2"></i> Ustawienia
+                </a>
+            </nav>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 p-4">
+            <a href="/logout" class="block text-center py-2 px-4 bg-red-600 hover:bg-red-700 rounded">
+                <i class="fas fa-sign-out-alt mr-2"></i> Wyloguj
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="ml-64 p-8">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-gray-500">Użytkownicy Premium</p>
+                        <p class="text-2xl font-bold">{{ stats.premium_users }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100 text-green-600">
+                        <i class="fas fa-ticket text-2xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-gray-500">Aktywne Tickety</p>
+                        <p class="text-2xl font-bold">{{ stats.active_tickets }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                        <i class="fas fa-chart-bar text-2xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-gray-500">Wszyscy Użytkownicy</p>
+                        <p class="text-2xl font-bold">{{ stats.total_members }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                        <i class="fas fa-star text-2xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-gray-500">Graficy</p>
+                        <p class="text-2xl font-bold">{{ stats.graphic_users }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Management -->
+        <div class="bg-white rounded-lg shadow p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Zarządzanie Premium</h2>
+            <form id="premium-form" class="grid grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">ID Użytkownika</label>
+                    <input type="text" id="user-id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Czas trwania</label>
+                    <select id="duration" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="30d">30 dni</option>
+                        <option value="60d">60 dni</option>
+                        <option value="90d">90 dni</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button type="submit" class="w-full bg-purple-600 text-white p-2 rounded-md hover:bg-purple-700">
+                        <i class="fas fa-crown mr-2"></i> Nadaj Premium
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Announcements -->
+        <div class="bg-white rounded-lg shadow p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Wyślij Ogłoszenie</h2>
+            <form id="announcement-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Tytuł</label>
+                    <input type="text" id="announcement-title" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Treść</label>
+                    <textarea id="announcement-content" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"></textarea>
+                </div>
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                        <i class="fas fa-paper-plane mr-2"></i> Wyślij
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold mb-4">Ostatnia Aktywność</h2>
+            <div class="space-y-4">
+                <div class="flex items-center p-4 bg-gray-50 rounded">
+                    <i class="fas fa-user-plus text-green-500 mr-4"></i>
+                    <div>
+                        <p class="font-medium">Nowy użytkownik Premium</p>
+                        <p class="text-sm text-gray-500">5 minut temu</p>
+                    </div>
+                </div>
+                <div class="flex items-center p-4 bg-gray-50 rounded">
+                    <i class="fas fa-ticket text-blue-500 mr-4"></i>
+                    <div>
+                        <p class="font-medium">Nowy ticket utworzony</p>
+                        <p class="text-sm text-gray-500">15 minut temu</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Premium Form Handler
+        document.getElementById('premium-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const userId = document.getElementById('user-id').value;
+            const duration = document.getElementById('duration').value;
+
+            try {
+                const response = await fetch('/api/premium/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        duration: duration
+                    })
+                });
+                
+                const data = await response.json();
+                if(data.success) {
+                    alert('Premium nadane pomyślnie!');
+                    location.reload();
+                } else {
+                    alert('Błąd: ' + data.error);
+                }
+            } catch(error) {
+                alert('Wystąpił błąd podczas komunikacji z serwerem');
+            }
+        });
+
+        // Announcement Form Handler
+        document.getElementById('announcement-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('announcement-title').value;
+            const content = document.getElementById('announcement-content').value;
+
+            try {
+                const response = await fetch('/api/bot/announcement', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        content: content
+                    })
+                });
+                
+                const data = await response.json();
+                if(data.success) {
+                    alert('Ogłoszenie wysłane pomyślnie!');
+                    document.getElementById('announcement-form').reset();
+                } else {
+                    alert('Błąd: ' + data.error);
+                }
+            } catch(error) {
+                alert('Wystąpił błąd podczas wysyłania ogłoszenia');
+            }
+        });
+    </script>
+</body>
+</html>
